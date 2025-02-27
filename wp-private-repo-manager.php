@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name: WP Private Repository Manager
- * Description: Manage private repositories in WordPress with branch and type selection.
+ * Plugin Name: WP Repository Manager
+ * Description: Manage repositories in WordPress with branch and type selection.
  * Version: 1.0
  * Author: Your Name
  */
