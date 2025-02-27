@@ -7,11 +7,12 @@ if (!defined('ABSPATH')) {
 function wprm_add_admin_page() {
     add_menu_page(
         'Repo Manager',
+        'Repo Manager',
         'manage_options',
         'wprm-admin',
         'wprm_admin_page',
         'dashicons-admin-plugins',
-        6
+        100
     );
 }
 
