@@ -79,7 +79,7 @@ This project is licensed under the GPL v2 or later.
 
 ## Author
 
-[Your Name]
+@author [Mihai Zaporojan](https://github.com/zaporojanmiha)
 
 ## Changelog
 
