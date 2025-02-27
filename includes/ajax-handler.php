@@ -7,9 +7,6 @@ add_action('wp_ajax_wprm_update_branch', 'wprm_update_branch');
 add_action('wp_ajax_wprm_get_pull_history', 'wprm_get_pull_history');
 add_action('wp_ajax_wprm_delete_repository', 'wprm_delete_repository');
 
-// Include encryption utilities
-require_once(plugin_dir_path(__FILE__) . 'encryption.php');
-
 function wprm_get_branches() {
     check_ajax_referer('wprm_admin_nonce', '_ajax_nonce');
     
@@ -46,7 +43,6 @@ function wprm_get_branches() {
     );
 
     if (!empty($token)) {
-        // The token coming from the form is not encrypted yet, so don't try to decrypt it
         $args['headers']['Authorization'] = 'Bearer ' . $token;
     }
 
@@ -144,15 +140,10 @@ function wprm_save_repository() {
     if ($existing_index >= 0) {
         // Update existing repository
         $old_token = isset($repositories[$existing_index]['token']) ? $repositories[$existing_index]['token'] : '';
-        // Decrypt the old token for comparison
-        if (!empty($old_token)) {
-            $old_token = WPRM_Encryption::decrypt($old_token);
-        }
-        
         $repositories[$existing_index] = array(
             'url' => $repo_url,
             'branch' => $branch,
-            'token' => !empty($token) ? WPRM_Encryption::encrypt($token) : '',
+            'token' => $token,
             'type' => $type,
             'added' => $repositories[$existing_index]['added']
         );
@@ -163,7 +154,7 @@ function wprm_save_repository() {
         $repositories[] = array(
             'url' => $repo_url,
             'branch' => $branch,
-            'token' => !empty($token) ? WPRM_Encryption::encrypt($token) : '',
+            'token' => $token,
             'type' => $type,
             'added' => current_time('mysql')
         );
@@ -224,9 +215,7 @@ function wprm_pull_repository() {
     );
 
     if (!empty($repo['token'])) {
-        // Decrypt token before using
-        $decrypted_token = WPRM_Encryption::decrypt($repo['token']);
-        $args['headers']['Authorization'] = 'Bearer ' . $decrypted_token;
+        $args['headers']['Authorization'] = 'Bearer ' . $repo['token'];
     }
 
     // Download the ZIP file
