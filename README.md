@@ -57,7 +57,6 @@ A WordPress plugin that allows you to manage and automatically update private or
 
 ## Security
 
-- Personal access tokens are stored securely in the WordPress database
 - All admin actions are protected with nonces
 - Repository operations are restricted to administrators only
 
