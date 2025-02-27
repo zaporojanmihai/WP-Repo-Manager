@@ -2,8 +2,6 @@
 
 ![GitHub all releases](https://img.shields.io/github/downloads/zaporojanmihai/WP-Repo-Manager/total?style=flat-square)
 
-![GitHub latest release downloads](https://img.shields.io/github/downloads/zaporojanmihai/WP-Repo-Manager/latest/total)
-
 ![image](https://github.com/user-attachments/assets/0e640b15-88df-44e0-bcbb-5b5a48d6e873)
 
 A WordPress plugin that allows you to manage and automatically update private or public Git repositories directly from your WordPress admin dashboard.
