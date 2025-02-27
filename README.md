@@ -31,7 +31,6 @@ A WordPress plugin that allows you to manage and automatically update private or
    - Repository URL (HTTPS format)
    - Repository Type (Plugin/Theme)
    - Branch Name
-   - Username (for private repos)
    - Personal Access Token (for private repos)
 4. Click "Add Repository"
 
