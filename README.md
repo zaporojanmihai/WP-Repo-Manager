@@ -1,15 +1,15 @@
-# WordPress Private Repository Manager
+# WordPress Repository Manager
 
 ![image](https://github.com/user-attachments/assets/0e640b15-88df-44e0-bcbb-5b5a48d6e873)
 
-A WordPress plugin that allows you to manage and automatically update private Git repositories directly from your WordPress admin dashboard.
+A WordPress plugin that allows you to manage and automatically update private or public Git repositories directly from your WordPress admin dashboard.
 
 ## Features
 
-- **Repository Management**: Add, edit, and delete private Git repositories
+- **Repository Management**: Add, edit, and delete Git repositories
 - **Multiple Repository Types**: Support for both plugins and themes
 - **Branch Selection**: Choose which branch to pull from for each repository
-- **Automatic Updates**: Pull the latest changes from your private repositories with a single click
+- **Automatic Updates**: Pull the latest changes from your repositories with a single click
 - **Pull History**: Track all repository updates with detailed history and status indicators
 - **Secure**: Safely store and manage repository credentials
 - **User-Friendly Interface**: Clean, WordPress-native admin interface
@@ -19,13 +19,13 @@ A WordPress plugin that allows you to manage and automatically update private Gi
 1. Download the plugin zip file
 2. Go to WordPress admin > Plugins > Add New > Upload Plugin
 3. Upload the zip file and activate the plugin
-4. Navigate to Settings > WP Private Repo Manager to start managing your repositories
+4. Navigate to Settings > WP Repo Manager to start managing your repositories
 
 ## Usage
 
 ### Adding a Repository
 
-1. Navigate to Settings > WP Private Repo Manager
+1. Navigate to Settings > WP Repo Manager
 2. Click "Add New Repository"
 3. Fill in the repository details:
    - Repository URL (HTTPS format)
@@ -63,7 +63,7 @@ A WordPress plugin that allows you to manage and automatically update private Gi
 
 ## Development
 
-This plugin was developed to solve the challenge of managing private WordPress plugins and themes hosted in private Git repositories. Key features include:
+Key features include:
 
 - Clean separation of concerns (admin interface, repository handling, AJAX operations)
 - WordPress coding standards compliance
