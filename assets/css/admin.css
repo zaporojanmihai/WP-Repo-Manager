@@ -1,0 +1,67 @@
+.wprm-admin-wrap {
+    max-width: 1200px;
+    margin: 20px auto;
+    margin-left: 10px;
+}
+
+.wprm-admin-card {
+    background: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+
+.wprm-admin-table {
+    width: 100%;
+    margin-top: 15px;
+}
+
+.wprm-admin-table th {
+    font-weight: 600;
+}
+
+.wprm-admin-table .actions {
+    width: 120px;
+}
+
+.wprm-admin-table .button {
+    margin: 0;
+}
+
+.wprm-form-table {
+    margin-top: 15px;
+}
+
+.wprm-form-table th {
+    width: 200px;
+}
+
+/* Loading state */
+.wprm-admin-table tr.processing {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.wprm-admin-table tr.processing .button .spinner {
+    float: none;
+    margin: 0 5px 0 0;
+    visibility: visible;
+}
+
+.wprm-repo-message {
+    margin-top: 5px;
+    font-size: 13px;
+}
+
+.wprm-message-success {
+    color: #46b450;
+}
+
+.wprm-message-error {
+    color: #dc3232;
+}
+
+.wp-core-ui .button-link-delete {
+    border-color: #dc3232;
+    color: #dc3232;
+}
