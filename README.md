@@ -6,16 +6,6 @@
 
 A WordPress plugin that allows you to manage and automatically update private or public Git repositories directly from your WordPress admin dashboard.
 
-## Features
-
-- **Repository Management**: Add, edit, and delete Git repositories
-- **Multiple Repository Types**: Support for both plugins and themes
-- **Branch Selection**: Choose which branch to pull from for each repository
-- **Automatic Updates**: Pull the latest changes from your repositories with a single click
-- **Pull History**: Track all repository updates with detailed history and status indicators
-- **Secure**: Safely store and manage repository credentials
-- **User-Friendly Interface**: Clean, WordPress-native admin interface
-
 ## Installation
 
 1. Download the plugin zip file
@@ -85,7 +75,7 @@ This project is licensed under the GPL v2 or later.
 
 ## Changelog
 
-### 1.0.0
+### 1.0.8
 - Initial release
 - Repository management functionality
 - Pull history tracking
