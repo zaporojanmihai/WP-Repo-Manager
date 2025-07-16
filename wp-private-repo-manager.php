@@ -13,7 +13,6 @@ if (!defined('ABSPATH')) {
 
 // Include necessary files
 require_once plugin_dir_path(__FILE__) . 'includes/admin-page.php';
-require_once plugin_dir_path(__FILE__) . 'includes/repo-handler.php';
 require_once plugin_dir_path(__FILE__) . 'includes/ajax-handler.php';
 
 // Initialize plugin

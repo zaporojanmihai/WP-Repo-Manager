@@ -298,49 +298,20 @@ function wprm_pull_repository() {
         }
     }
 
-    // First try to copy the files
-    $copied = false;
-    
-    // List all files in extracted directory
-    $files = $wp_filesystem->dirlist($extracted_dir, true, true);
-    if (empty($files)) {
-        error_log('WPRM - No files found in extracted dir');
-        wp_send_json_error('No files found in extracted directory');
+    // Use WordPress helper to copy everything recursively.
+    require_once ABSPATH . 'wp-admin/includes/file.php';
+
+    // Ensure target directory exists (parent dir created earlier).
+    if ( ! wp_mkdir_p( $target_dir ) ) {
+        error_log( 'WPRM - Failed to create target dir: ' . $target_dir );
+        wp_send_json_error( 'Failed to create target directory' );
     }
 
-    error_log('WPRM - Files found: ' . print_r($files, true));
+    $copy_result = copy_dir( $extracted_dir, $target_dir );
 
-    // Create target directory
-    if (!wp_mkdir_p($target_dir)) {
-        error_log('WPRM - Failed to create target dir: ' . $target_dir);
-        wp_send_json_error('Failed to create target directory');
-    }
-
-    // Copy files recursively
-    foreach ($files as $file => $file_data) {
-        $source = trailingslashit($extracted_dir) . $file;
-        $destination = trailingslashit($target_dir) . $file;
-
-        if ($file_data['type'] === 'd') {
-            // It's a directory
-            if (!wp_mkdir_p($destination)) {
-                error_log('WPRM - Failed to create directory: ' . $destination);
-                continue;
-            }
-        } else {
-            // It's a file
-            if (!$wp_filesystem->copy($source, $destination)) {
-                error_log('WPRM - Failed to copy file: ' . $source . ' to ' . $destination);
-                $copied = false;
-                break;
-            }
-            $copied = true;
-        }
-    }
-
-    if (!$copied) {
-        error_log('WPRM - Failed to copy files from ' . $extracted_dir . ' to ' . $target_dir);
-        wp_send_json_error('Failed to copy files to destination');
+    if ( is_wp_error( $copy_result ) ) {
+        error_log( 'WPRM - copy_dir error: ' . $copy_result->get_error_message() );
+        wp_send_json_error( 'Failed to copy files: ' . $copy_result->get_error_message() );
     }
 
     // Clean up extraction directory

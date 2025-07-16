@@ -155,7 +155,8 @@ jQuery(document).ready(function($) {
         var $row = $button.closest('tr');
         var $message = $row.find('.wprm-repo-message');
         
-        // Disable button while pulling
+        // Show waiting message and disable button while pulling
+        $message.text('Waiting...').css('color', '#555');
         $button.prop('disabled', true);
         
         $.ajax({
@@ -168,7 +169,7 @@ jQuery(document).ready(function($) {
             },
             success: function(response) {
                 if (response.success) {
-                    $message.text('Pull successful!').css('color', '#46b450');
+                    $message.text('Success!').css('color', '#46b450');
                     // Update last pull time
                     $row.find('td:eq(3)').text(response.data.last_pull || 'Just now');
                     
