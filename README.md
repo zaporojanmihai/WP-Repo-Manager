@@ -12,7 +12,7 @@ A WordPress plugin that allows you to manage and automatically update private or
 2. Go to WordPress admin > Plugins > Add New > Upload Plugin
 3. Upload the zip file and activate the plugin
 4. What you still need to do once, in go to wp-config.php and add the following line:
-define( 'WPRM_TOKEN_KEY', 'your-very-long-random-secret-string-here' ); 
+> define( 'WPRM_TOKEN_KEY', 'your-very-long-random-secret-string-here' ); 
 (use https://api.wordpress.org/secret-key/1.1/salt/ to generate a random string)
 5. Navigate to Settings > WP Repo Manager to start managing your repositories
  
