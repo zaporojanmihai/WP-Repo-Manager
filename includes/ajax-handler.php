@@ -1,4 +1,38 @@
 <?php
+/**
+ * Token encryption utilities for secure storage.
+ * Set a unique 32+ char key in wp-config.php as WPRM_TOKEN_KEY.
+ * Fallbacks to WordPress AUTH_KEY if not defined.
+ */
+if ( ! defined( 'WPRM_TOKEN_KEY' ) ) {
+    define( 'WPRM_TOKEN_KEY', AUTH_KEY );
+}
+if ( ! function_exists( 'wprm_encrypt_token' ) ) {
+    function wprm_encrypt_token( $plain ) {
+        if ( $plain === '' ) {
+            return '';
+        }
+        $key = hash( 'sha256', WPRM_TOKEN_KEY, true ); // 32-byte key
+        $iv  = random_bytes( 16 );
+        $cipher = openssl_encrypt( $plain, 'AES-256-CBC', $key, OPENSSL_RAW_DATA, $iv );
+        return base64_encode( $iv . $cipher );
+    }
+    function wprm_decrypt_token( $encoded ) {
+        if ( $encoded === '' ) {
+            return '';
+        }
+        $data = base64_decode( $encoded, true );
+        if ( $data === false || strlen( $data ) <= 16 ) {
+            return false; // Not encrypted with our helper.
+        }
+        $iv      = substr( $data, 0, 16 );
+        $cipher  = substr( $data, 16 );
+        $key     = hash( 'sha256', WPRM_TOKEN_KEY, true );
+        $plain = openssl_decrypt( $cipher, 'AES-256-CBC', $key, OPENSSL_RAW_DATA, $iv );
+        return $plain === false ? false : $plain;
+    }
+}
+
 // Handle getting branches
 add_action('wp_ajax_wprm_get_branches', 'wprm_get_branches');
 add_action('wp_ajax_wprm_save_repository', 'wprm_save_repository');
@@ -16,6 +50,7 @@ function wprm_get_branches() {
 
     $repo_url = isset($_POST['repo_url']) ? sanitize_text_field($_POST['repo_url']) : '';
     $token = isset($_POST['token']) ? sanitize_text_field($_POST['token']) : '';
+    $enc_token = ! empty( $token ) ? wprm_encrypt_token( $token ) : '';
     
     if (empty($repo_url)) {
         wp_send_json_error('Repository URL is required');
@@ -116,6 +151,7 @@ function wprm_save_repository() {
     $repo_url = isset($_POST['repo_url']) ? sanitize_text_field($_POST['repo_url']) : '';
     $branch = isset($_POST['branch']) ? sanitize_text_field($_POST['branch']) : '';
     $token = isset($_POST['token']) ? sanitize_text_field($_POST['token']) : '';
+    $enc_token = ! empty( $token ) ? wprm_encrypt_token( $token ) : '';
     $type = isset($_POST['type']) ? sanitize_text_field($_POST['type']) : 'plugin';
     
     if (empty($repo_url) || empty($branch)) {
@@ -139,22 +175,24 @@ function wprm_save_repository() {
 
     if ($existing_index >= 0) {
         // Update existing repository
-        $old_token = isset($repositories[$existing_index]['token']) ? $repositories[$existing_index]['token'] : '';
+        $old_token_enc = isset($repositories[$existing_index]['token']) ? $repositories[$existing_index]['token'] : '';
+        $old_token_plain = wprm_decrypt_token( $old_token_enc );
+        if ( $old_token_plain === false ) { $old_token_plain = $old_token_enc; }
         $repositories[$existing_index] = array(
             'url' => $repo_url,
             'branch' => $branch,
-            'token' => $token,
+            'token' => $enc_token,
             'type' => $type,
             'added' => $repositories[$existing_index]['added']
         );
         $message = 'Repository updated successfully';
-        $token_changed = ($old_token !== $token);
+        $token_changed = ( $old_token_plain !== $token );
     } else {
         // Add new repository
         $repositories[] = array(
             'url' => $repo_url,
             'branch' => $branch,
-            'token' => $token,
+            'token' => $enc_token,
             'type' => $type,
             'added' => current_time('mysql')
         );
@@ -214,13 +252,15 @@ function wprm_pull_repository() {
         'timeout' => 60
     );
 
-    if (!empty($repo['token'])) {
-        $args['headers']['Authorization'] = 'Bearer ' . $repo['token'];
+    $token_dec = wprm_decrypt_token( isset( $repo['token'] ) ? $repo['token'] : '' );
+    if ( $token_dec === false ) { $token_dec = isset( $repo['token'] ) ? $repo['token'] : ''; }
+
+    if (!empty($token_dec)) {
+        $args['headers']['Authorization'] = 'Bearer ' . $token_dec;
     }
 
     // Download the ZIP file
-    $response = wp_remote_get($api_url, $args);
-    
+    $response = wp_remote_get( $api_url, $args );
     if (is_wp_error($response)) {
         wp_send_json_error('Failed to download repository: ' . $response->get_error_message());
     }

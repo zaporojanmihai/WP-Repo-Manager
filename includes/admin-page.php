@@ -89,7 +89,7 @@ function wprm_admin_page() {
                 echo '</tr></thead>';
                 echo '<tbody>';
                 foreach ($repositories as $index => $repo) {
-                    echo '<tr data-repo-url="' . esc_attr($repo['url']) . '" data-repo-token="' . esc_attr($repo['token']) . '">';
+                    echo '<tr data-repo-url="' . esc_attr($repo['url']) . '" data-repo-token="' . esc_attr( ( ( $dec = ( function_exists('wprm_decrypt_token') ? wprm_decrypt_token( $repo['token'] ) : $repo['token'] ) ) !== false ? $dec : $repo['token'] ) ) . '">';
                     echo '<td>' . esc_html($repo['url']) . '<div class="wprm-repo-message"></div></td>';
                     echo '<td>' . esc_html(isset($repo['type']) ? ucfirst($repo['type']) : 'Plugin') . '</td>';
                     echo '<td class="branch-cell" data-branch="' . esc_attr($repo['branch']) . '">' 
