@@ -131,14 +131,21 @@ jQuery(document).ready(function($) {
         
         // Create new row
         var $newRow = $('<tr></tr>');
+        $newRow.addClass('wprm-history-highlight');
         $newRow.append('<td>' + historyItem.repo_url + '</td>');
         $newRow.append('<td>' + historyItem.type + '</td>');
         $newRow.append('<td>' + historyItem.branch + '</td>');
         $newRow.append('<td>' + historyItem.timestamp + '</td>');
+        $newRow.append('<td>' + (historyItem.user ? historyItem.user : '-') + '</td>');
         $newRow.append('<td>' + (historyItem.status ? '<span style="color: #46b450;">Success</span>' : '<span style="color: #dc3232;">Failed</span>') + '</td>');
         
         // Add to top of table
         $historyTable.prepend($newRow);
+
+        // Remove highlight after a short delay (CSS handles the fade)
+        setTimeout(function() {
+            $newRow.removeClass('wprm-history-highlight');
+        }, 3000);
         
         // Hide "no history" message if present
         if ($noHistory.length) {

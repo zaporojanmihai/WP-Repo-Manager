@@ -3,7 +3,10 @@
  * Plugin Name: WP Repository Manager
  * Description: Manage repositories in WordPress with branch and type selection.
  * Version: 1.0
- * Author: Your Name
+ * Author: Zaporojan Mihai
+ * License: GPL2
+ * Text Domain: wp-repo-manager
+ * Copyright: 2025 Zaporojan Mihai
  */
 
 // Exit if accessed directly
@@ -24,7 +27,9 @@ function wprm_init() {
 function wprm_enqueue_admin_scripts($hook) {
     if ($hook !== 'toplevel_page_wprm-admin') return;
     
-    wp_enqueue_script('wprm-admin', plugins_url('assets/js/admin.js', __FILE__), ['jquery'], '1.0', true);
+    $wprm_admin_js_path = plugin_dir_path(__FILE__) . 'assets/js/admin.js';
+    $wprm_admin_js_ver  = file_exists($wprm_admin_js_path) ? filemtime($wprm_admin_js_path) : '1.0';
+    wp_enqueue_script('wprm-admin', plugins_url('assets/js/admin.js', __FILE__), ['jquery'], $wprm_admin_js_ver, true);
     
     wp_localize_script('wprm-admin', 'wprm_admin', [
         'ajaxurl' => admin_url('admin-ajax.php'),

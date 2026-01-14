@@ -121,6 +121,7 @@ function wprm_admin_page() {
                 echo '<th>Type</th>';
                 echo '<th>Branch</th>';
                 echo '<th>Timestamp</th>';
+                echo '<th>User</th>';
                 echo '<th>Status</th>';
                 echo '</tr></thead>';
                 echo '<tbody>';
@@ -130,6 +131,7 @@ function wprm_admin_page() {
                     echo '<td>' . esc_html(isset($pull['type']) ? ucfirst($pull['type']) : 'Plugin') . '</td>';
                     echo '<td>' . esc_html($pull['branch']) . '</td>';
                     echo '<td>' . esc_html($pull['timestamp']) . '</td>';
+                    echo '<td>' . esc_html(isset($pull['user']) && $pull['user'] !== '' ? $pull['user'] : '-') . '</td>';
                     echo '<td>' . (isset($pull['status']) && $pull['status'] ? '<span style="color: #46b450;">Success</span>' : '<span style="color: #dc3232;">Failed</span>') . '</td>';
                     echo '</tr>';
                 }
@@ -159,6 +161,12 @@ function wprm_admin_page() {
     }
     .wprm-pull-history {
         margin-top: 30px;
+    }
+    .wprm-pull-history tbody tr td {
+        transition: background-color 2s ease;
+    }
+    .wprm-pull-history tbody tr.wprm-history-highlight td {
+        background-color: #fff8c5;
     }
     .wprm-pull-history code {
         background: #f0f0f1;

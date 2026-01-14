@@ -361,12 +361,18 @@ function wprm_pull_repository() {
     }
 
     // Record pull history
+    $current_user = wp_get_current_user();
+    $pulled_by = ( $current_user && $current_user->exists() )
+        ? ( $current_user->user_login ? $current_user->user_login : $current_user->display_name )
+        : '';
+
     $pull_history = get_option('wprm_pull_history', array());
     $history_item = array(
         'repo_url' => $repo['url'],
         'type' => $repo['type'],
         'branch' => $repo['branch'],
         'timestamp' => current_time('mysql'),
+        'user' => $pulled_by,
         'status' => true,
         'target_dir' => $target_dir
     );
@@ -464,6 +470,7 @@ function wprm_get_pull_history() {
             'repo_url' => esc_html($item['repo_url']),
             'branch' => esc_html($item['branch']),
             'timestamp' => esc_html($item['timestamp']),
+            'user' => isset($item['user']) ? esc_html($item['user']) : '',
             'target_dir' => esc_html($item['target_dir'])
         );
     }, $history_slice);
